@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Failure Test"
+           tests="1"
+           failures="0"
+           errors="0"
+           skipped="0"
+           time="2.642">
+    <properties></properties>
+            <testcase
+                name="addProductToCart"
+                time="2.642"
+                classname="com.qdbrowserstack.passTest">
+            </testcase>
+</testsuite>
