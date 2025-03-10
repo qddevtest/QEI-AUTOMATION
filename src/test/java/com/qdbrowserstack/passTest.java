@@ -1,6 +1,7 @@
 package com.qdbrowserstack;
 import BaseDriver.DriverSetup;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -24,5 +25,7 @@ public class passTest extends DriverSetup {
         // Check the product inside the cart is same as of the main page
         String productOnCartText = driver.findElement(By.xpath("//*[@id=\"__next\"]/div/div/div[2]/div[2]/div[2]/div/div[3]/p[1]")).getText();
         Assert.assertEquals(productOnScreenText, productOnCartText);
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"Product matched\"}}");
     }
 }
