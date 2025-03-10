@@ -1,5 +1,5 @@
-userName: browserstackci1
-accessKey: HPLz65WrJAbmBqsL1QoR
+userName:
+accessKey:
 platforms:
   - os: Windows
     osVersion: 10
