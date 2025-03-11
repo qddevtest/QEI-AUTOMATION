@@ -40,4 +40,4 @@ jobs:
         if: always()
         with:
           name: testng-junit-report_test1
-          path: target
+          path: target/surefire-reports/junitreports/*.xml
