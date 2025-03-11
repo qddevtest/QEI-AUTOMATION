@@ -16,10 +16,13 @@ public class DriverSetup {
     public void setUp() throws Exception {
         String username, accessKey;
         String browserstackEnv = System.getenv("BROWSERSTACK_ENV");
+        System.out.println(browserstackEnv);
 
         if (browserstackEnv != null && browserstackEnv.equals("preprod")) {
             username = System.getenv("BROWSERSTACK_USERNAME_PRE_PROD");
             accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY_PRE_PROD");
+            System.out.println(username);
+            System.out.println(accessKey);
         } else {
             username = System.getenv("BROWSERSTACK_USERNAME");
             accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
