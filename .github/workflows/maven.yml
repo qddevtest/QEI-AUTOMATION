@@ -30,7 +30,6 @@ jobs:
       - name: Set BrowserStack Environment Variables
         run: |
           echo "BROWSERSTACK_PROJECT=QEI PASSING JOB" >> $GITHUB_ENV
-          echo "BROWSERSTACK_BUILD=Build-${{ github.run_number }}" >> $GITHUB_ENV
           echo "BROWSERSTACK_SESSION=PASSING_JOB" >> $GITHUB_ENV
 
       - name: Build and Test with Maven
