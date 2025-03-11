@@ -8,18 +8,27 @@ import org.testng.annotations.BeforeMethod;
 
 import java.net.URL;
 
-
 public class DriverSetup {
 
-   public WebDriver driver;
+    public WebDriver driver;
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() throws Exception {
-        String username = System.getenv("BROWSERSTACK_USERNAME");
-        String accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
-        String  projectName = System.getenv("BROWSERSTACK_PROJECT");
-        String  buildName = System.getenv("BROWSERSTACK_BUILD");
-        String  sessionName = System.getenv("BROWSERSTACK_NAME");
+        String username, accessKey;
+        String browserstackEnv = System.getenv("BROWSERSTACK_ENV");
+
+        if (browserstackEnv != null && browserstackEnv.equals("preprod")) {
+            username = System.getenv("BROWSERSTACK_USERNAME_PRE_PROD");
+            accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY_PRE_PROD");
+        } else {
+            username = System.getenv("BROWSERSTACK_USERNAME");
+            accessKey = System.getenv("BROWSERSTACK_ACCESS_KEY");
+        }
+
+        String projectName = System.getenv("BROWSERSTACK_PROJECT");
+        String buildName = System.getenv("BROWSERSTACK_BUILD");
+        String sessionName = System.getenv("BROWSERSTACK_NAME");
+
         DesiredCapabilities caps = new DesiredCapabilities();
         // BrowserStack credentials
         caps.setCapability("browserstack.user", username);
@@ -34,15 +43,20 @@ public class DriverSetup {
         caps.setCapability("build", buildName);
         caps.setCapability("name", sessionName);
 
-
         // Read Test Observability flag from command line
-        String testObservability = System.getProperty("TEST OBSERVABILITY", "false"); // Default to false if not set
+        String testObservability = System.getProperty("TEST_OBSERVABILITY", "false"); // Default to false if not set
         caps.setCapability("browserstack.testObservability", testObservability);
-        // Initialize WebDriver for BrowserStack
-        driver = new RemoteWebDriver(new URL("https://hub.browserstack.com/wd/hub"), caps);
+      if (browserstackEnv != null && browserstackEnv.equals("preprod")) {
+          driver = new RemoteWebDriver(new URL("https://hub-preprod.bsstag.com/wd/hub"), caps);
+      }else{
+          driver = new RemoteWebDriver(new URL("https://hub.browserstack.com/wd/hub"), caps);
+      }
     }
+
     @AfterMethod(alwaysRun = true)
-    public void tearDown() throws Exception {
-        driver.quit();
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
