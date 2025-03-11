@@ -50,7 +50,7 @@ jobs:
       publishJUnitResults: true
       testResultsFiles: '**/surefire-reports/junitreports/*.xml'
       goals: 'clean test'
-      options: '-Dsurefire.suiteXmlFiles=src/test/config/passTest.xml'
+      options: '-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml'
     env:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
