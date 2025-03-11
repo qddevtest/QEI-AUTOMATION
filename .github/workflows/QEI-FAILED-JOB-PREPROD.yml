@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env :
+      BROWSERSTACK_USERNAME_PRE_PROD: ${{ secrets.BROWSERSTACK_USERNAME_PRE_PROD }}
+      BROWSERSTACK_ACCESS_KEY_PRE_PROD: ${{ secrets.BROWSERSTACK_ACCESS_KEY_PRE_PROD }}
 
     steps:
       - name: Checkout repository
@@ -20,11 +23,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Setup BrowserStack Environment
-        uses: browserstack/github-actions/setup-env@master
-        with:
-          username: ${{ secrets.BROWSERSTACK_ACCESS_KEY_PRE_PROD }}
-          access-key: ${{ secrets.BROWSERSTACK_USERNAME_PRE_PROD }}
     
 
       - name: Set BrowserStack Environment Variables
