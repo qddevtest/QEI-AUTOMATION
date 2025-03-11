@@ -25,12 +25,13 @@ jobs:
         with:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          build-name: "GitHub Actions Build for QEI PASSING JOB"
+    
 
       - name: Set BrowserStack Environment Variables
         run: |
           echo "BROWSERSTACK_PROJECT=QEI PASSING JOB" >> $GITHUB_ENV
-          echo "BROWSERSTACK_SESSION=PASSING_JOB" >> $GITHUB_ENV
+          echo "BROWSERSTACK_BUILD=Build-QEI-PASSING-JOB" >> $GITHUB_ENV
+          echo "BROWSERSTACK_NAME=PASSING-JOB-TEST" >> $GITHUB_ENV
 
       - name: Build and Test with Maven
         run: mvn clean test "-Dsurefire.suiteXmlFiles=src/test/config/passTest.xml"
