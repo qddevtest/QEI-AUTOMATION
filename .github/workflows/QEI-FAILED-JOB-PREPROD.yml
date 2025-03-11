@@ -1,4 +1,4 @@
-name: QEI Passing JOB PREPROD
+name: QEI Fail JOB PREPROD
 
 on:
   workflow_dispatch:
@@ -29,9 +29,9 @@ jobs:
 
       - name: Set BrowserStack Environment Variables
         run: |
-          echo "BROWSERSTACK_PROJECT=QEI PASSING JOB" >> $GITHUB_ENV
-          echo "BROWSERSTACK_BUILD=Build-QEI-PASSING-JOB" >> $GITHUB_ENV
-          echo "BROWSERSTACK_NAME=PASSING-JOB-TEST" >> $GITHUB_ENV
+          echo "BROWSERSTACK_PROJECT=QEI FAILING JOB" >> $GITHUB_ENV
+          echo "BROWSERSTACK_BUILD=Build-QEI-FAILING-JOB" >> $GITHUB_ENV
+          echo "BROWSERSTACK_NAME=FAILING-JOB-TEST" >> $GITHUB_ENV
           echo "BROWSERSTACK_ENV=preprod" >> $GITHUB_ENV
       - name: Build and Test with Maven
         run: mvn clean test "-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml"
