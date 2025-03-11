@@ -1,4 +1,4 @@
-name: QEI Passing JOB
+name: QEI Failed JOB
 
 on:
   workflow_dispatch:
