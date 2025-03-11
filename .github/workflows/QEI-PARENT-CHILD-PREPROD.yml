@@ -30,6 +30,7 @@ jobs:
           echo "BROWSERSTACK_PROJECT=QEI-PARENT-CHILD-JOB" >> $GITHUB_ENV
           echo "BROWSERSTACK_BUILD=Build-QEI-PARENT-CHILD-JOB" >> $GITHUB_ENV
           echo "BROWSERSTACK_NAME=PARENT-CHILD-JOB-TEST" >> $GITHUB_ENV
+          echo "BROWSERSTACK_ENV=preprod" >> $GITHUB_ENV
 
       - name: Build with Maven
         run: mvn clean test -Dsurefire.suiteXmlFiles=src/test/config/passTest.xml
