@@ -27,7 +27,7 @@ jobs:
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
       - name: Build and Test with Maven
-        run: mvn clean test "-Dsurefire.suiteXmlFiles=src/test/config/passTest.xml"
+        run: mvn clean test "-Dsurefire.suiteXmlFiles=src/test/config/flakyTest.xml"
 
       - name: Archive TestNG Results
         uses: actions/upload-artifact@v4
