@@ -21,7 +21,7 @@ jobs:
           cache: maven
 
       - name: Setup BrowserStack Environment
-        uses: browserstack/github-actions@v2
+        uses: browserstack/github-actions@master
         with:
           username: ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
