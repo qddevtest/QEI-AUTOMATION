@@ -13,9 +13,10 @@ steps:
       jdkVersionOption: '1.11'
       jdkArchitectureOption: 'x64'
       publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/*.xml'
+      testResultsFiles: 'target/surefire-reports/junitreports/*.xml'
       goals: 'clean test'
       options: '-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml'
+      continueOnError: true
     env:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
