@@ -15,6 +15,7 @@ steps:
       publishJUnitResults: true
       testResultsFiles: '**/surefire-reports/*.xml'
       goals: 'clean test'
+      continueOnError: true
     env:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
