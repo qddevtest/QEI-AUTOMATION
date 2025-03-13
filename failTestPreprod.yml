@@ -1,0 +1,36 @@
+trigger:
+  - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.11'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: 'target/surefire-reports/junitreports/*.xml'
+      goals: 'clean test'
+      options: '-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml'
+      continueOnError: true
+    env:
+      BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME_PRE_PROD)
+      BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY_PRE_PROD)
+      BROWSERSTACK_PROJECT: $(BROWSERSTACK_PROJECT)
+      BROWSERSTACK_BUILD: $(BROWSERSTACK_BUILD)
+      BROWSERSTACK_NAME: $(BROWSERSTACK_NAME)
+
+  - task: CopyFiles@2
+    inputs:
+      contents: 'target/surefire-reports/junitreports/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'JUnitReports'
+      publishLocation: 'Container'
