@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 public class MultipleTest extends DriverSetup {
 
     @Test
-    public void addProductToCart() throws Exception {
+    public void flakyTest() throws Exception {
         driver.get("https://www.bstackdemo.com");
 
         // Check the title
@@ -31,22 +31,12 @@ public class MultipleTest extends DriverSetup {
         jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"Product matched\"}}");
     }
 
-    @Test(invocationCount = 2)
+    @Test()
     public void flakyTest(ITestContext testContext) throws Exception {
-        int currentCount = testContext.getAllTestMethods()[0].getCurrentInvocationCount();
-        System.out.println("Executing count: " + currentCount);
-        driver.get("https://www.bstackdemo.com");
         JavascriptExecutor jse = (JavascriptExecutor)driver;
-        // Check the title
-        if(currentCount == 0) {
-            System.out.println(currentCount);
-            Assert.assertTrue(driver.getTitle().matches("StackDemo"));
-            jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\": \"passed\", \"reason\": \"Title matched!\"}}");
-
-        }else {
             Assert.assertTrue(driver.getTitle().matches("Failure"));
             jse.executeScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \"Title not matched\"}}");
         }
     }
-}
+
 
