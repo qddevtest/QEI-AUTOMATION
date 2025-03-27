@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Fail Suite">
+    <test name="Failure Test">
+        <classes>
+            <class name="com.qdbrowserstack.MultipleTest"/>
+        </classes>
+    </test>
+</suite>
