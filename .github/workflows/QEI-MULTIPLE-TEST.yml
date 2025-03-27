@@ -1,4 +1,4 @@
-name: QEI Passing JOB
+name: QEI Multiple JOB
 
 on:
   workflow_dispatch:
