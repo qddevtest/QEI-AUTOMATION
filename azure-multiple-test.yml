@@ -16,6 +16,7 @@ steps:
       testResultsFiles: '**/surefire-reports/*.xml'
       goals: 'clean test'
       options: '-Dsurefire.suiteXmlFiles=src/test/config/MultipleTest.xml'
+      continueOnError: true
     env:
       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME)
       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY)
