@@ -25,11 +25,13 @@ steps:
       BROWSERSTACK_NAME: $(BROWSERSTACK_NAME)
 
   - task: CopyFiles@2
+    condition: always()
     inputs:
       contents: 'target/surefire-reports/junitreports/*'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
+    condition: always()
     inputs:
       pathToPublish: '$(Build.ArtifactStagingDirectory)'
       artifactName: 'JUnitReports'
