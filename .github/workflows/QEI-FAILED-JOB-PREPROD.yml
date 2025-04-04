@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env :
-      BROWSERSTACK_USERNAME_PRE_PROD: ${{ secrets.BROWSERSTACK_USERNAME_PRE_PROD }}
-      BROWSERSTACK_ACCESS_KEY_PRE_PROD: ${{ secrets.BROWSERSTACK_ACCESS_KEY_PRE_PROD }}
+      BROWSERSTACK_USERNAME_PRE_PROD: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY_PRE_PROD: ${{ secrets.BROWSERSTACK_ACCESS }}
 
     steps:
       - name: Checkout repository
@@ -30,7 +30,7 @@ jobs:
           echo "BROWSERSTACK_PROJECT=QEI FAILING JOB" >> $GITHUB_ENV
           echo "BROWSERSTACK_BUILD=Build-QEI-FAILING-JOB" >> $GITHUB_ENV
           echo "BROWSERSTACK_NAME=FAILING-JOB-TEST" >> $GITHUB_ENV
-          echo "BROWSERSTACK_ENV=preprod" >> $GITHUB_ENV
+
       - name: Build and Test with Maven
         run: mvn clean test "-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml"
 
