@@ -29,6 +29,7 @@ steps:
       contents: 'target/surefire-reports/junitreports/*xml'
       targetFolder: '$(Build.ArtifactStagingDirectory)'
 
+
   - task: PublishBuildArtifacts@1
     inputs:
       pathToPublish: '$(Build.ArtifactStagingDirectory)/junitreports'
