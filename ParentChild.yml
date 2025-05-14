@@ -1,6 +1,74 @@
+# # Maven
+# # Build your Java project and run tests with Apache Maven.
+# # Add steps that analyze code, save build artifacts, deploy, and more:
+# # https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+# trigger: none
+
+# pool:
+#   vmImage: ubuntu-latest
+
+# jobs:
+# - job: Passing_Test_Case
+#   displayName: Passing Test Case
+#   steps:
+#   - task: Maven@4
+#     inputs:
+#       mavenPomFile: 'pom.xml'
+#       mavenOptions: '-Xmx3072m'
+#       javaHomeOption: 'JDKVersion'
+#       jdkVersionOption: '1.11'
+#       jdkArchitectureOption: 'x64'
+#       publishJUnitResults: true
+#       testResultsFiles: '**/surefire-reports/junitreports/*.xml'
+#       goals: 'clean test'
+#       options: '-Dsurefire.suiteXmlFiles=src/test/config/passTest.xml'
+#     env:
+#       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME_PRE_PROD)
+#       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY_PRE_PROD)
+#       BROWSERSTACK_PROJECT:  $(BROWSERSTACK_PROJECT)
+#       BROWSERSTACK_BUILD: $(BROWSERSTACK_BUILD)
+#       BROWSERSTACK_NAME: $(BROWSERSTACK_NAME)
+#   - task: CopyFiles@2
+#     inputs:
+#       Contents: 'target/surefire-reports/junitreports/*'
+#       TargetFolder: '$(Build.ArtifactStagingDirectory)'
+#   - task: PublishBuildArtifacts@1
+#     inputs:
+#       pathToPublish: '$(Build.ArtifactStagingDirectory)'
+#       artifactName: 'JUnitReportsDependentJobPass'
+#       publishLocation: 'Container'
+
+# - job: Failing_Test_Case
+#   displayName: Failing Test Case
+#   dependsOn: Passing_Test_Case
+#   steps:
+#   - task: Maven@4
+#     inputs:
+#       mavenPomFile: 'pom.xml'
+#       mavenOptions: '-Xmx3072m'
+#       javaHomeOption: 'JDKVersion'
+#       jdkVersionOption: '1.11'
+#       jdkArchitectureOption: 'x64'
+#       publishJUnitResults: true
+#       testResultsFiles: '**/surefire-reports/junitreports/*.xml'
+#       goals: 'clean test'
+#       options: '-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml'
+#     env:
+#       BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME_PRE_PROD)
+#       BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY_PRE_PROD)
+#     continueOnError: true
+#   - task: CopyFiles@2
+#     inputs:
+#       Contents: 'target/surefire-reports/junitreports/*'
+#       TargetFolder: '$(Build.ArtifactStagingDirectory)'
+#   - task: PublishBuildArtifacts@1
+#     inputs:
+#       pathToPublish: '$(Build.ArtifactStagingDirectory)'
+#       artifactName: 'JUnitReportsDependentJobFail'
+#       publishLocation: 'Container'      
 # Maven
 # Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger: none
@@ -12,58 +80,84 @@ jobs:
 - job: Passing_Test_Case
   displayName: Passing Test Case
   steps:
-  - task: Maven@4
-    inputs:
-      mavenPomFile: 'pom.xml'
-      mavenOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/junitreports/*.xml'
-      goals: 'clean test'
-      options: '-Dsurefire.suiteXmlFiles=src/test/config/passTest.xml'
-    env:
-      BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME_PRE_PROD)
-      BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY_PRE_PROD)
-      BROWSERSTACK_PROJECT:  $(BROWSERSTACK_PROJECT)
-      BROWSERSTACK_BUILD: $(BROWSERSTACK_BUILD)
-      BROWSERSTACK_NAME: $(BROWSERSTACK_NAME)
-  - task: CopyFiles@2
-    inputs:
-      Contents: 'target/surefire-reports/junitreports/*'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: 'JUnitReportsDependentJobPass'
-      publishLocation: 'Container'
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/junitreports/*.xml'
+        goals: 'clean test'
+        options: '-Dsurefire.suiteXmlFiles=src/test/config/passTest.xml'
+      env:
+        BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME_PRE_PROD)
+        BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY_PRE_PROD)
+        BROWSERSTACK_PROJECT: $(BROWSERSTACK_PROJECT)
+        BROWSERSTACK_BUILD: $(BROWSERSTACK_BUILD)
+        BROWSERSTACK_NAME: $(BROWSERSTACK_NAME)
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: '**/surefire-reports/junitreports/*.xml'
+        testRunTitle: 'Passing Test Case Results'
+        failTaskOnFailedTests: false
+      condition: always()
+
+    - script: cat target/surefire-reports/*.txt || true
+      displayName: 'Print Surefire Logs'
+      condition: always()
+
+    - task: CopyFiles@2
+      inputs:
+        contents: 'target/surefire-reports/junitreports/*'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'JUnitReportsDependentJobPass'
+        publishLocation: 'Container'
 
 - job: Failing_Test_Case
   displayName: Failing Test Case
   dependsOn: Passing_Test_Case
   steps:
-  - task: Maven@3
-    inputs:
-      mavenPomFile: 'pom.xml'
-      mavenOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.11'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/junitreports/*.xml'
-      goals: 'clean test'
-      options: '-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml'
-    env:
-      BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME_PRE_PROD)
-      BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY_PRE_PROD)
-    continueOnError: true
-  - task: CopyFiles@2
-    inputs:
-      Contents: 'target/surefire-reports/junitreports/*'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: 'JUnitReportsDependentJobFail'
-      publishLocation: 'Container'      
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.11'
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/junitreports/*.xml'
+        goals: 'clean test'
+        options: '-Dsurefire.suiteXmlFiles=src/test/config/failTest.xml'
+        ignoreTestFailures: true
+      env:
+        BROWSERSTACK_USERNAME: $(BROWSERSTACK_USERNAME_PRE_PROD)
+        BROWSERSTACK_ACCESS_KEY: $(BROWSERSTACK_ACCESS_KEY_PRE_PROD)
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFiles: '**/surefire-reports/junitreports/*.xml'
+        testRunTitle: 'Failing Test Case Results'
+        failTaskOnFailedTests: false
+      condition: always()
+
+    - script: cat target/surefire-reports/*.txt || true
+      displayName: 'Print Surefire Logs'
+      condition: always()
+
+    - task: CopyFiles@2
+      inputs:
+        contents: 'target/surefire-reports/junitreports/*'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'JUnitReportsDependentJobFail'
+        publishLocation: 'Container'
